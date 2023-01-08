@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Collections;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 namespace s
 {
@@ -23,6 +24,10 @@ namespace s
         private TextMeshProUGUI textContent;
         private GameObject goTriangle;
 
+        private PlayerInput playerInput;
+
+        private UnityEvent onDialogueFinish;
+
         private void Awake()
         {
             groupDialogue = GameObject.Find("對話畫布").GetComponent<CanvasGroup>();
@@ -31,9 +36,18 @@ namespace s
             goTriangle = GameObject.Find("對話完成圖示");
             goTriangle.SetActive(false);
 
-            StartCoroutine(FadeGroup());
-            StartCoroutine(TypeEffect());
+            playerInput = GameObject.Find("PlayerCapsule").GetComponent<PlayerInput>();
 
+            StartDialogue(dialogueOpening);
+
+        }
+
+        public void StartDialogue(DialogueData data, UnityEvent _onDialogueFinish = null)
+        {
+            playerInput.enabled = false;
+            StartCoroutine(FadeGroup());
+            StartCoroutine(TypeEffect(data));
+            onDialogueFinish = _onDialogueFinish;
         }
 
         /// <summary>
@@ -41,7 +55,7 @@ namespace s
         /// </summary>
         /// <returns></returns>
 
-        private IEnumerator FadeGroup()
+        private IEnumerator FadeGroup(bool fadeIn = true)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -54,16 +68,16 @@ namespace s
         /// 打字效果
         /// </summary>
         /// <returns></returns>
-        private IEnumerator TypeEffect()
+        private IEnumerator TypeEffect(DialogueData data)
         {
-            textName.text = dialogueOpening.dialogueName;
+            textName.text = data.dialogueName;
 
-            for (int j = 0; j < dialogueOpening.dialogueContents.Length; j++)
+            for (int j = 0; j < data.dialogueContents.Length; j++)
             {
                 textContent.text = "";
                 goTriangle.SetActive(false);
 
-                string dialogue = dialogueOpening.dialogueContents[j];
+                string dialogue = data.dialogueContents[j];
 
                 for (int i = 0; i < dialogue.Length; i++)
                 {
@@ -79,6 +93,10 @@ namespace s
                     yield return null;
                 }
             }
+            StartCoroutine(FadeGroup(false));
+
+            playerInput.enabled = true;   //開啟玩家輸入元件
+            onDialogueFinish?.Invoke();    //對話結束事件.呼叫();
         }
     }
 }
