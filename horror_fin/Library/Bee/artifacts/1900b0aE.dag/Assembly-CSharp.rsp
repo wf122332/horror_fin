@@ -357,6 +357,7 @@
 "Assets/Script/DialogueData.cs"
 "Assets/Script/DialogueSystem.cs"
 "Assets/Script/InteractableSystem.cs"
+"Assets/Script/SoundSystem.cs"
 "Assets/StarterAssets/FirstPersonController/Scripts/BasicRigidBodyPush.cs"
 "Assets/StarterAssets/FirstPersonController/Scripts/FirstPersonController.cs"
 "Assets/StarterAssets/InputSystem/StarterAssetsInputs.cs"
