@@ -26,6 +26,8 @@ namespace s
         private string nameTarget = "PlayerCapsule";
         private DialogueSystem dialogueSystem;
 
+        
+
         private void Awake()
         {
             dialogueSystem = GameObject.Find("¹ï¸Üµe¥¬").GetComponent<DialogueSystem>();
